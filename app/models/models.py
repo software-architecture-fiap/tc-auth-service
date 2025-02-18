@@ -14,7 +14,7 @@ class Customer(Base):
         email (str): Email do cliente.
         cpf (str): CPF do cliente.
         hashed_password (str): Senha do cliente criptografada.
-        orders (relationship): Relacionamento com pedidos associados ao 
+        orders (relationship): Relacionamento com pedidos associados ao
         cliente.
     """
 
