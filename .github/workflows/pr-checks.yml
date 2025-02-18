@@ -6,7 +6,7 @@ on:
       - "tests/**"
 
 jobs:
-  Validating:
+  Lint-Flake8:
     uses: software-architecture-fiap/lint-flake8-workflow/.github/workflows/lint-flake8-pr-changed-files.yml@main
 
   Unit-Test:

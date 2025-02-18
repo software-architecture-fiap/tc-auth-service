@@ -1,6 +1,6 @@
 import pytest
-from sqlalchemy import create_engine, Column, Integer, String
-from sqlalchemy.orm import sessionmaker, validates
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from ..database.database import Base
 from ..models.models import Customer
 
@@ -82,8 +82,8 @@ def test_create_customer_with_invalid_email(test_db):
         cpf="12345678901",
         hashed_password="hashed_password"
     )
-    test_db.add(new_customer)
     with pytest.raises(ValueError, match="Invalid email address"):
+        test_db.add(new_customer)
         test_db.commit()
 
 
@@ -107,6 +107,7 @@ def test_create_customer_with_duplicate_email(test_db):
     with pytest.raises(Exception):
         test_db.add(customer2)
         test_db.commit()
+    test_db.rollback()
 
 
 def test_create_customer_with_duplicate_cpf(test_db):
