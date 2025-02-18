@@ -1,6 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, ConfigDict
 
+
 class CustomerBase(BaseModel):
     """
     Modelo Base para Dados de Clientes.
@@ -15,6 +16,7 @@ class CustomerBase(BaseModel):
     email: Optional[str] = None
     cpf: Optional[str] = None
 
+
 class CustomerCreate(CustomerBase):
     """
     Modelo para Criação de um Novo Cliente.
@@ -24,6 +26,7 @@ class CustomerCreate(CustomerBase):
     """
 
     password: Optional[str] = None
+
 
 class Customer(CustomerBase):
     """
@@ -42,6 +45,7 @@ class Customer(CustomerBase):
 
         model_config = ConfigDict(from_attributes=True)
 
+
 class CPFIdentify(BaseModel):
     """
     Modelo para Identificação por CPF.
@@ -51,6 +55,7 @@ class CPFIdentify(BaseModel):
     """
 
     cpf: str
+
 
 class Token(BaseModel):
     """
@@ -64,6 +69,7 @@ class Token(BaseModel):
     access_token: str
     customer_id: int
 
+
 class TokenData(BaseModel):
     """
     Modelo para Dados do Token.
@@ -73,6 +79,7 @@ class TokenData(BaseModel):
     """
 
     username: Optional[str] = None
+
 
 class TokenRequest(BaseModel):
     username: str

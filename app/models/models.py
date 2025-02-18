@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 
 from ..database.database import Base
 
+
 class Customer(Base):
     """
     Representa um Cliente na Base de Dados.
@@ -13,7 +14,8 @@ class Customer(Base):
         email (str): Email do cliente.
         cpf (str): CPF do cliente.
         hashed_password (str): Senha do cliente criptografada.
-        orders (relationship): Relacionamento com pedidos associados ao cliente.
+        orders (relationship): Relacionamento com pedidos associados ao 
+        cliente.
     """
 
     __tablename__ = 'customers'
@@ -23,6 +25,7 @@ class Customer(Base):
     email = Column(String, unique=True, index=True)
     cpf = Column(String, unique=True, index=True)
     hashed_password = Column(String)
+
 
 class Token(Base):
     """
@@ -44,4 +47,3 @@ class Token(Base):
     user_id = Column(Integer, ForeignKey('customers.id'))
 
     user = relationship('Customer')
-
