@@ -131,10 +131,9 @@ jobs:
           echo "Using image version: ${{ env.NEW_VERSION }}"
 
           kubectl apply -k $KUSTOMIZE_DIR -n $ENVIRONMENT && echo "Resources deployed successfully!"
-          kubectl rollout status deployment/${{ env.SERVICE_NAME }} -n $ENVIRONMENT
-
-          kubectl rollout undo deployment/${{ env.SERVICE_NAME }} -n $ENVIRONMENT || {
-            echo "Failed to deploy $SERVICE_NAME, reverting to previous version. Please check the logs"
-            kubectl logs deployment/${{ env.SERVICE_NAME }} -n $ENVIRONMENT --tail=100
-            exit 1
+              kubectl rollout status deployment/${{ env.SERVICE_NAME }} -n $ENVIRONMENT || {
+                echo "Deployment failed, reverting to previous version."
+                kubectl rollout undo deployment/${{ env.SERVICE_NAME }} -n $ENVIRONMENT
+                kubectl logs deployment/${{ env.SERVICE_NAME }} -n $ENVIRONMENT --tail=100
+                exit 1
           }

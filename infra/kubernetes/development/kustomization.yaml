@@ -4,16 +4,16 @@ kind: Kustomization
 namespace: development
 
 resources:
-  - ../base
-  - namespace.yaml
+- ../base
+- namespace.yaml
 
 patches:
-  - path: deployment-patch.yaml
-    target:
-      kind: Deployment
+- path: patch-deployment.yaml
+  target:
+    kind: Deployment
 
-images:
-  - name: app/tc-auth-service
-    newName: 147671223315.dkr.ecr.us-east-1.amazonaws.com/app/tc-auth-service
     # newName: <<account-id>>.dkr.ecr.us-east-1.amazonaws.com/app/web
-    newTag: latest
+images:
+- name: app/tc-auth-service
+  newName: 147671223315.dkr.ecr.us-east-1.amazonaws.com/app/tc-auth-service
+  newTag: 93aa24524f637335a3e7de8d5cbc24406e8f7b8b-dev

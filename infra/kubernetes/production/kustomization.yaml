@@ -9,7 +9,7 @@ resources:
 
 
 patches:
-  - path: deployment-patch.yaml
+  - path: patch-deployment.yaml
     target:
       kind: Deployment
 
