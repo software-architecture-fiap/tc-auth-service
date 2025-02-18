@@ -59,7 +59,7 @@ def test_update_customer(test_db):
     test_db.commit()
     test_db.refresh(customer)
 
-    assert customer.name == "Jane Doe"
+    assert customer.name == "Jeane Doe"
 
 
 def test_delete_customer(test_db):
@@ -72,7 +72,9 @@ def test_delete_customer(test_db):
     customer = test_db.query(Customer).filter(
         Customer.email == "john.doe@example.com"
     ).first()
-assert customer is None
+    assert customer is None
+
+
 def test_create_customer_with_invalid_email(test_db):
     new_customer = Customer(
         name="Invalid Email",
