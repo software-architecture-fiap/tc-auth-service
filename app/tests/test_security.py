@@ -4,7 +4,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from jose import jwt
 from datetime import datetime, timedelta, timezone
-from ..security import get_current_user, SECRET_KEY, ALGORITHM
+from app.services.security import get_current_user, SECRET_KEY, ALGORITHM
 from ..models import schemas
 
 
