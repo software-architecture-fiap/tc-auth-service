@@ -59,7 +59,7 @@ def test_update_customer(test_db):
     test_db.commit()
     test_db.refresh(customer)
 
-    assert customer.name == "Jeane Doe"
+    assert customer.name == "Jane Doe"
 
 
 def test_delete_customer(test_db):
@@ -82,8 +82,8 @@ def test_create_customer_with_invalid_email(test_db):
         cpf="12345678901",
         hashed_password="hashed_password"
     )
+    test_db.add(new_customer)
     with pytest.raises(Exception):
-        test_db.add(new_customer)
         test_db.commit()
 
 
@@ -97,7 +97,7 @@ def test_create_customer_with_duplicate_email(test_db):
     customer2 = Customer(
         name="Customer Two",
         email="duplicate@example.com",
-        cpf="12345678903",
+        cpf="12345678904",
         hashed_password="hashed_password2"
     )
     test_db.add(customer1)
@@ -119,7 +119,7 @@ def test_create_customer_with_duplicate_cpf(test_db):
     customer2 = Customer(
         name="Customer Two",
         email="unique2@example.com",
-        cpf="12345678904",
+        cpf="12345678903",
         hashed_password="hashed_password2"
     )
     test_db.add(customer1)

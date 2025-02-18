@@ -36,7 +36,7 @@ def expired_token(token_data):
 
 def test_get_current_user_valid_token(db_session, valid_token):
     user = schemas.Customer(
-        id="test_user_id",
+        id=1,
         name="Test User",
         email="test@example.com")
     db_session.query.return_value.filter.return_value.first.return_value = user
