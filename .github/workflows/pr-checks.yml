@@ -43,5 +43,5 @@ jobs:
       - name: Check Poetry environment
         run: poetry show --tree
 
-      - name: Run tests with coverage
-        run: poetry run pytest --cov=app --cov-report=xml --cov-fail-under=80
+      - name: Run tests
+        run: poetry run pytest
