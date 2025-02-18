@@ -2,7 +2,7 @@ import pytest
 from unittest import mock
 from sqlalchemy.orm import Session
 from app.models import models
-from app import schemas
+from ..models import schemas
 from app.services.repository import (
     create_admin_user,
     create_customer,
