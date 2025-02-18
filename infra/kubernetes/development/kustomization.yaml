@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: development
+
+resources:
+  - ../base
+  - namespace.yaml
+
+patchesStrategicMerge:
+  - auth/deployment-patch.yaml
+
+images:
+  - name: app/tc-auth-service
+    newName: 123456789.dkr.ecr.us-east-1.amazonaws.com/app/tc-auth-service
+    newTag: latest

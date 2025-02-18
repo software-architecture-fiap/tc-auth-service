@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: auth-service
+          image: app/tc-auth-service:latest
+          env:
+            - name: ENVIRONMENT
+              value: "development"
+            - name: DATABASE_URL
+              value: "postgresql://postgres:P0stgr3S@auth-db:5432/auth_database"
