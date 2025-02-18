@@ -7,7 +7,7 @@ on:
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: app/${{ github.event.repository.name }}
-  EKS_CLUSTER_NAME: EKS-lanches-cluster
+  EKS_CLUSTER_NAME: EKS-lanchonete-cluster
   GH_TOKEN: ${{ github.token }}
   SERVICE_NAME: ${{ github.event.repository.name }}
 
