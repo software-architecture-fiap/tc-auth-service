@@ -40,7 +40,7 @@ jobs:
             |--------------------|----------------------|--------------------------|
             | 🐞 **Correção (Patch)** | `bugfix/`           | `bugfix/corrige-login`   |
             | ✨ **Nova feature (Minor)** | `feature/`         | `feature/novo-cadastro`  |
-            | 🚀 **Mudança grande (Major)** | `release/`         | `release/v2.0.0`        |
+            | 🚀 **Mudança relevante (Major)** | `release/`         | `release/v2.0.0`        |
             | 📄 **Docs ou Ajustes** | `doc/` ou `misc/`   | `doc/atualiza-readme`    |
 
             **⚠️ Importante:**  
