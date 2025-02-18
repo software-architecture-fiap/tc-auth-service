@@ -12,6 +12,7 @@ router = APIRouter()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+
 @router.post('/admin', response_model=schemas.Customer)
 def create_customer(
     customer: schemas.CustomerCreate, 
@@ -39,6 +40,7 @@ def create_customer(
     logger.info(f'Cliente criado com ID: {created_customer.id}')
     return created_customer
 
+
 @router.get('/', response_model=Union[schemas.Customer, List[schemas.Customer]])
 def get_customers(
     customer_id: Optional[int] = None,
@@ -60,7 +62,8 @@ def get_customers(
         db (Session): A sessão do banco de dados.
 
     Returns:
-        schemas.Customer | List[schemas.Customer]: Um cliente específico ou uma lista de clientes.
+        schemas.Customer | List[schemas.Customer]:
+        Um cliente específico ou uma lista de clientes.
     """
     if customer_id:
         logger.info(f'Buscando cliente com ID: {customer_id}')
@@ -68,7 +71,9 @@ def get_customers(
 
         if db_customer is None:
             logger.warning(f'Cliente com ID {customer_id} não encontrado')
-            raise HTTPException(status_code=404, detail='Cliente não encontrado')
+            raise HTTPException(
+                status_code=404, detail='Cliente não encontrado'
+            )
 
         # 🔹 Conversão do modelo SQLAlchemy para Pydantic
         return schemas.Customer.model_validate(db_customer)
@@ -77,7 +82,11 @@ def get_customers(
     db_customers = repository.get_customers(db, skip=skip, limit=limit)
 
     # 🔹 Conversão do modelo SQLAlchemy para Pydantic (Lista)
-    return [schemas.Customer.model_validate(customer) for customer in db_customers]
+    return [
+        schemas.Customer.model_validate(customer) 
+        for customer in db_customers
+    ]
+
 
 @router.post('/identify', response_model=schemas.Customer)
 def check_customer(
@@ -103,6 +112,7 @@ def check_customer(
         logger.warning(f'Cliente com CPF {cpf.cpf} não encontrado')
         raise HTTPException(status_code=404, detail='Cliente não encontrado')
     return db_customer
+
 
 @router.post('/register', response_model=schemas.Customer)
 def create_customer(
@@ -130,6 +140,7 @@ def create_customer(
     created_customer = repository.create_user(db=db, user=customer)
     logger.info(f'Cliente registrado com ID: {created_customer.id}')
     return created_customer
+
 
 @router.post('/anonymous', response_model=schemas.Customer)
 def create_anonymous_customer(

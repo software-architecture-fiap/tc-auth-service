@@ -12,6 +12,7 @@ router = APIRouter()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+
 @router.post("/token", response_model=schemas.Token)
 def generate_token(
     db: Session = Depends(get_db),
@@ -20,7 +21,9 @@ def generate_token(
     """Autentica um usuário e retorna um token JWT."""
     user = security.get_user_by_email(db, form_data.username)
     
-    if not user or not security.verify_password(form_data.password, user.hashed_password):
+    if not user or not security.verify_password(
+        form_data.password, user.hashed_password
+    ):
         logger.error("Credenciais inválidas")
         raise HTTPException(status_code=400, detail="Credenciais inválidas")
 
@@ -32,6 +35,7 @@ def generate_token(
         customer_id=str(user.id)
     )
 
+
 @router.get("/auth", response_model=schemas.Customer)
 def validate_token(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     """Valida um token JWT e retorna os detalhes do usuário autenticado."""
@@ -41,4 +45,7 @@ def validate_token(token: str = Depends(oauth2_scheme), db: Session = Depends(ge
     except HTTPException as e:
         raise HTTPException(status_code=e.status_code, detail=e.detail)
     except Exception:
-        raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail="Token inválido ou expirado")
+        raise HTTPException(
+            status_code=HTTP_401_UNAUTHORIZED, 
+            detail="Token inválido ou expirado"
+        )
