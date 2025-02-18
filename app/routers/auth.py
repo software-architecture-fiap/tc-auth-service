@@ -20,7 +20,6 @@ def generate_token(
 ):
     """Autentica um usuário e retorna um token JWT."""
     user = security.get_user_by_email(db, form_data.username)
-    
     if not user or not security.verify_password(
         form_data.password, user.hashed_password
     ):
@@ -37,7 +36,9 @@ def generate_token(
 
 
 @router.get("/auth", response_model=schemas.Customer)
-def validate_token(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+def validate_token(
+    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
+):
     """Valida um token JWT e retorna os detalhes do usuário autenticado."""
     try:
         user = security.get_current_user(db, token)
@@ -46,6 +47,6 @@ def validate_token(token: str = Depends(oauth2_scheme), db: Session = Depends(ge
         raise HTTPException(status_code=e.status_code, detail=e.detail)
     except Exception:
         raise HTTPException(
-            status_code=HTTP_401_UNAUTHORIZED, 
+            status_code=HTTP_401_UNAUTHORIZED,
             detail="Token inválido ou expirado"
         )

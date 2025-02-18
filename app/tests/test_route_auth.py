@@ -53,4 +53,4 @@ def test_auth_invalid_credentials(mocker):
     response = client.post("/token", data=form_data)
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert "msg" in response.json() 
+    assert "msg" in response.json()

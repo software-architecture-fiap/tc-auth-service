@@ -61,7 +61,7 @@ def test_create_customer(mocker, mock_db_session, mock_customer):
 
 
 def test_create_customer_existing_email(
-    mocker, mock_db_session, mock_customer):
+        mocker, mock_db_session, mock_customer):
     """Test creating a customer with an existing email"""
     mocker.patch(
         "app.services.repository.get_user_by_email",

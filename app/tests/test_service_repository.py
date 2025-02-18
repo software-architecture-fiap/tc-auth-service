@@ -24,7 +24,7 @@ def test_create_admin_user_creates_new_user(db_session, mock_env_vars):
         'app.services.security.get_password_hash',
         return_value='hashed_password'
     ):
-        create_admin_user(db_session)  
+        create_admin_user(db_session)
     assert db_session.add.called
     assert db_session.commit.called
     assert db_session.refresh.called
