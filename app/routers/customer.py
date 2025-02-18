@@ -15,10 +15,11 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 @router.post('/admin', response_model=schemas.Customer)
 def create_customer(
-    customer: schemas.CustomerCreate, 
-    db: Session = Depends(get_db),
-    current_user: schemas.Customer = Depends(security.get_current_user)
-    ) -> schemas.Customer:
+    customer: schemas.CustomerCreate,
+        db: Session = Depends(get_db),
+        current_user: schemas.Customer = Depends(
+            security.get_current_user)
+) -> schemas.Customer:
     """Cria um novo cliente com as informações fornecidas.
 
     Args:
@@ -41,7 +42,10 @@ def create_customer(
     return created_customer
 
 
-@router.get('/', response_model=Union[schemas.Customer, List[schemas.Customer]])
+@router.get(
+    '/', response_model=Union[
+        schemas.Customer, List[schemas.Customer]]
+    )
 def get_customers(
     customer_id: Optional[int] = None,
     skip: int = 0,
@@ -83,17 +87,17 @@ def get_customers(
 
     # 🔹 Conversão do modelo SQLAlchemy para Pydantic (Lista)
     return [
-        schemas.Customer.model_validate(customer) 
+        schemas.Customer.model_validate(customer)
         for customer in db_customers
     ]
 
 
 @router.post('/identify', response_model=schemas.Customer)
 def check_customer(
-    cpf: schemas.CPFIdentify, 
+    cpf: schemas.CPFIdentify,
     db: Session = Depends(get_db),
     current_user: schemas.Customer = Depends(security.get_current_user)
-    ) -> schemas.Customer:
+) -> schemas.Customer:
     """Identifica um cliente pelo CPF.
 
     Args:
@@ -115,11 +119,12 @@ def check_customer(
 
 
 @router.post('/register', response_model=schemas.Customer)
+
 def create_customer(
-    customer: schemas.CustomerCreate, 
+    customer: schemas.CustomerCreate,
     db: Session = Depends(get_db),
     current_user: schemas.Customer = Depends(security.get_current_user)
-    ) -> schemas.Customer:
+) -> schemas.Customer:
     """Registra um novo cliente com as informações fornecidas.
 
     Args:
@@ -146,7 +151,7 @@ def create_customer(
 def create_anonymous_customer(
     db: Session = Depends(get_db),
     current_user: schemas.Customer = Depends(security.get_current_user)
-    ) -> schemas.Customer:
+) -> schemas.Customer:
     """Cria um novo cliente anônimo.
 
     Args:
