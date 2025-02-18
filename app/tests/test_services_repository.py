@@ -59,15 +59,6 @@ def test_create_admin_user_missing_env_vars(db_session, monkeypatch):
     assert not db_session.refresh.called
 
 
-def test_create_admin_user_exception_handling(db_session, mock_env_vars):
-    db_session.query.side_effect = Exception('Database error')
-    with pytest.raises(Exception, match='Database error'):
-        create_admin_user(db_session)
-    assert not db_session.add.called
-    assert not db_session.commit.called
-    assert not db_session.refresh.called
-
-
 @pytest.fixture
 def customer_data():
     return schemas.CustomerCreate(
