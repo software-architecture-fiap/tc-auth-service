@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - auth/deployment.yaml
   - auth/service.yaml
-  # - db/statefulset.yaml
-  # - db/service.yaml
-  # - db/configmap.yaml
-  # - db/secret.yaml
+  - db/statefulset.yaml
+  - db/service.yaml
+  - db/configmap.yaml
+  - db/secret.yaml
