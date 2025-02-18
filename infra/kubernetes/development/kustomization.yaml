@@ -7,10 +7,13 @@ resources:
   - ../base
   - namespace.yaml
 
-patchesStrategicMerge:
-  - auth/deployment-patch.yaml
+patches:
+  - path: deployment-patch.yaml
+    target:
+      kind: Deployment
 
 images:
   - name: app/tc-auth-service
-    newName: 123456789.dkr.ecr.us-east-1.amazonaws.com/app/tc-auth-service
+    newName: 147671223315.dkr.ecr.us-east-1.amazonaws.com/app/tc-auth-service
+    # newName: <<account-id>>.dkr.ecr.us-east-1.amazonaws.com/app/web
     newTag: latest
