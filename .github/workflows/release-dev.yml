@@ -83,11 +83,13 @@ jobs:
             
             # Check if namespace exists, if not create it
             kubectl get namespace $ENVIRONMENT || kubectl create namespace $ENVIRONMENT
-            
-            kustomize edit set image app/tc-auth-service=$ECR_REGISTRY/$ECR_REPOSITORY:${{ steps.build-image-dev.outputs.image-version }}
 
+            echo "Current directory: $(pwd)" && echo "List base files:" && ls -la ../base
+            
+            kustomize edit set image app/tc-auth-service=$ECR_REGISTRY/$ECR_REPOSITORY:${{ env.image-version }}
+            
             echo "Deploying $SERVICE_NAME in $ENVIRONMENT namespace."
-            echo "Using image version: ${{ steps.build-image-dev.outputs.image-version }}"
+            echo "Using image version: ${{ env.image-version }}"
 
             kubectl apply -k $KUSTOMIZE_DIR -n $ENVIRONMENT || { 
                 echo "Failed to deploy $SERVICE_NAME, reverting to previous version... Please, check the logs";
