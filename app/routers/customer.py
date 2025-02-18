@@ -119,8 +119,7 @@ def check_customer(
 
 
 @router.post('/register', response_model=schemas.Customer)
-
-def create_customer(
+def register_customer(
     customer: schemas.CustomerCreate,
     db: Session = Depends(get_db),
     current_user: schemas.Customer = Depends(security.get_current_user)
