@@ -19,21 +19,28 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+
 def get_user_by_email(db: Session, email: str):
-    """Movendo a importação para dentro da função para evitar erro de importação circular"""
+    """Movendo a importação para dentro da função para evitar erro de
+    importação circular"""
     from ..services.repository import get_user_by_email
     return get_user_by_email(db, email)
+
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
+
 def create_access_token(data: dict, expires_delta: timedelta = None) -> str:
     to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    expire = datetime.now(timezone.utc) + (expires_delta or timedelta(
+        minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
-def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)) -> schemas.Customer:
+
+def get_current_user(db: Session = Depends(get_db),
+                     token: str = Depends(oauth2_scheme)) -> schemas.Customer:
     """Verifica e retorna o usuário autenticado a partir do token JWT."""
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -57,6 +64,7 @@ def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_
         raise credentials_exception
 
     return user
+
 
 def get_password_hash(password: str) -> str:
     """Gera um hash para a senha fornecida.
