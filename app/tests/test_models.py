@@ -1,6 +1,6 @@
 import pytest
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.orm import sessionmaker, validates
 from ..database.database import Base
 from ..models.models import Customer
 
@@ -83,7 +83,7 @@ def test_create_customer_with_invalid_email(test_db):
         hashed_password="hashed_password"
     )
     test_db.add(new_customer)
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError, match="Invalid email address"):
         test_db.commit()
 
 
