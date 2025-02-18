@@ -72,4 +72,70 @@ def test_delete_customer(test_db):
     customer = test_db.query(Customer).filter(
         Customer.email == "john.doe@example.com"
     ).first()
-    assert customer is None
+assert customer is None
+def test_create_customer_with_invalid_email(test_db):
+    new_customer = Customer(
+        name="Invalid Email",
+        email="invalid-email",
+        cpf="12345678901",
+        hashed_password="hashed_password"
+    )
+    with pytest.raises(Exception):
+        test_db.add(new_customer)
+        test_db.commit()
+
+
+def test_create_customer_with_duplicate_email(test_db):
+    customer1 = Customer(
+        name="Customer One",
+        email="duplicate@example.com",
+        cpf="12345678902",
+        hashed_password="hashed_password1"
+    )
+    customer2 = Customer(
+        name="Customer Two",
+        email="duplicate@example.com",
+        cpf="12345678903",
+        hashed_password="hashed_password2"
+    )
+    test_db.add(customer1)
+    test_db.commit()
+    test_db.refresh(customer1)
+
+    with pytest.raises(Exception):
+        test_db.add(customer2)
+        test_db.commit()
+
+
+def test_create_customer_with_duplicate_cpf(test_db):
+    customer1 = Customer(
+        name="Customer One",
+        email="unique1@example.com",
+        cpf="12345678904",
+        hashed_password="hashed_password1"
+    )
+    customer2 = Customer(
+        name="Customer Two",
+        email="unique2@example.com",
+        cpf="12345678904",
+        hashed_password="hashed_password2"
+    )
+    test_db.add(customer1)
+    test_db.commit()
+    test_db.refresh(customer1)
+
+    with pytest.raises(Exception):
+        test_db.add(customer2)
+        test_db.commit()
+
+
+def test_create_customer_with_missing_fields(test_db):
+    new_customer = Customer(
+        name=None,
+        email=None,
+        cpf=None,
+        hashed_password=None
+    )
+    with pytest.raises(Exception):
+        test_db.add(new_customer)
+        test_db.commit()
