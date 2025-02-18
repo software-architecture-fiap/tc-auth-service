@@ -1,8 +1,9 @@
 import pytest
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, validates
 from ..database.database import Base
 from ..models.models import Customer
+import re
 
 # Setup the test database
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
@@ -13,6 +14,12 @@ TestingSessionLocal = sessionmaker(
     autocommit=False, autoflush=False, bind=engine
 )
 
+
+@validates('email')
+def validate_email(self, key, address):
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", address):
+        raise ValueError("Invalid email address")
+    return address
 
 @pytest.fixture(scope="module")
 def test_db():
@@ -97,14 +104,16 @@ def test_create_customer_with_duplicate_email(test_db):
     customer2 = Customer(
         name="Customer Two",
         email="duplicate@example.com",
-        cpf="12345678904",
+        cpf="12345678903",
         hashed_password="hashed_password2"
     )
     test_db.add(customer1)
     test_db.commit()
     test_db.refresh(customer1)
 
-    with pytest.raises(Exception):
+    with pytest.raises(
+        Exception, match="UNIQUE constraint failed: Customer.email"
+    ):
         test_db.add(customer2)
         test_db.commit()
     test_db.rollback()
@@ -132,13 +141,20 @@ def test_create_customer_with_duplicate_cpf(test_db):
         test_db.commit()
 
 
-def test_create_customer_with_missing_fields(test_db):
+def test_create_customer_with_invalid_cpf(test_db):
     new_customer = Customer(
-        name=None,
-        email=None,
-        cpf=None,
-        hashed_password=None
+        name="Invalid CPF",
+        email="example@email.com",
+        cpf="1234567890",
+        hashed_password="hashed_password"
     )
+    with pytest.raises(ValueError, match="CPF inválido"):
+        test_db.add(new_customer)
+        test_db.commit()
+
+
+def test_create_customer_with_missing_fields(test_db):
+    new_customer = Customer()
     with pytest.raises(Exception):
         test_db.add(new_customer)
         test_db.commit()
