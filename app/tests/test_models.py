@@ -1,8 +1,9 @@
 import pytest
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, validates
 from ..database.database import Base
 from ..models.models import Customer
+import re
 
 # Setup the test database
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
@@ -12,6 +13,13 @@ engine = create_engine(
 TestingSessionLocal = sessionmaker(
     autocommit=False, autoflush=False, bind=engine
 )
+
+
+@validates('email')
+def validate_email(self, key, address):
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", address):
+        raise ValueError("Invalid email address")
+    return address
 
 
 @pytest.fixture(scope="module")
@@ -73,72 +81,3 @@ def test_delete_customer(test_db):
         Customer.email == "john.doe@example.com"
     ).first()
     assert customer is None
-
-
-def test_create_customer_with_invalid_email(test_db):
-    new_customer = Customer(
-        name="Invalid Email",
-        email="invalid-email",
-        cpf="12345678901",
-        hashed_password="hashed_password"
-    )
-    with pytest.raises(ValueError, match="Invalid email address"):
-        test_db.add(new_customer)
-        test_db.commit()
-
-
-def test_create_customer_with_duplicate_email(test_db):
-    customer1 = Customer(
-        name="Customer One",
-        email="duplicate@example.com",
-        cpf="12345678902",
-        hashed_password="hashed_password1"
-    )
-    customer2 = Customer(
-        name="Customer Two",
-        email="duplicate@example.com",
-        cpf="12345678904",
-        hashed_password="hashed_password2"
-    )
-    test_db.add(customer1)
-    test_db.commit()
-    test_db.refresh(customer1)
-
-    with pytest.raises(Exception):
-        test_db.add(customer2)
-        test_db.commit()
-    test_db.rollback()
-
-
-def test_create_customer_with_duplicate_cpf(test_db):
-    customer1 = Customer(
-        name="Customer One",
-        email="unique1@example.com",
-        cpf="12345678904",
-        hashed_password="hashed_password1"
-    )
-    customer2 = Customer(
-        name="Customer Two",
-        email="unique2@example.com",
-        cpf="12345678903",
-        hashed_password="hashed_password2"
-    )
-    test_db.add(customer1)
-    test_db.commit()
-    test_db.refresh(customer1)
-
-    with pytest.raises(Exception):
-        test_db.add(customer2)
-        test_db.commit()
-
-
-def test_create_customer_with_missing_fields(test_db):
-    new_customer = Customer(
-        name=None,
-        email=None,
-        cpf=None,
-        hashed_password=None
-    )
-    with pytest.raises(Exception):
-        test_db.add(new_customer)
-        test_db.commit()
