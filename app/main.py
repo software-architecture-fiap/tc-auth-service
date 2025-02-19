@@ -24,7 +24,7 @@ Base.metadata.create_all(bind=engine)
 def init_admin_user() -> None:
     """Inicializa o usuário admin e configura o banco de dados.
 
-    Cria um usuário administrador e inicializa o banco de dados com dados 
+    Cria um usuário administrador e inicializa o banco de dados com dados
     padrão.
 
     Returns:
