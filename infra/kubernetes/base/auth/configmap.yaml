@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-service-config
+  namespace: development  # Ajuste conforme necessário
+data:
+  DATABASE_HOST: "auth-db"
+  DATABASE_PORT: "5432"
+  DATABASE_NAME: "auth_database"
+  SERVICE_PORT: "8000"
+  LOG_LEVEL: "info"
